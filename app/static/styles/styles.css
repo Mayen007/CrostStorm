@@ -1,0 +1,11 @@
+body{
+  background-color: black;
+  font-family: Tahoma,verdana;
+}
+html{
+scroll-behaviour:smooth;}
+
+footer a:hover{
+text-decoration: underline;
+color: neon;
+}

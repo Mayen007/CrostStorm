@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-center mt-2 mb-3 flex-column">
+    <div class="d-flex justify-content-center fs-1 my-3">
+        <img alt="logo image" height="auto" loading="lazy"
+             src="{{ url_for('static', filename='img/OIG (1).jpeg') }}"
+             width="70">
+    </div>
+    <h5 class="mt-3 mb-4">Create your account</h5>
+    <form action="" class="shadow-lg px-5 py-3 thumbnail" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label(class='form-label') }}
+            {{ form.username(size=28, class='form-control') }}
+            {% for error in form.username.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.email.label(class='form-label') }}
+            {{ form.email(size=28, class='form-control') }}
+            {% for error in form.email.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label(class='form-label') }}
+            {{ form.password(size=32, class='form-control') }}
+            {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password2.label(class='form-label') }}
+            {{ form.password2(size=32, class='form-control') }}
+            {% for error in form.password2.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit(class="btn btn-success btn-block mt-2") }}</p>
+        <div class="text-center mt-2">
+            <p>or sign up with:</p>
+            <button class="btn btn-secondary btn-floating mx-1" type="button">
+                <i class="fab fa-facebook-f fa-lg"></i>
+            </button>
+
+            <button class="btn btn-secondary btn-floating mx-1" type="button">
+                <i class="fab fa-google fa-lg"></i>
+            </button>
+
+            <button class="btn btn-secondary btn-floating mx-1" type="button">
+                <i class="fab fa-twitter fa-lg"></i>
+            </button>
+
+            <button class="btn btn-secondary btn-floating mx-1" type="button">
+                <i class="fab fa-github fa-lg"></i>
+            </button>
+        </div>
+    </form>
+    <p class="mt-4">Already have an account? <a href="{{ url_for('user_bp.login') }}" class="text-decoration-none">sign in</a></p>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}

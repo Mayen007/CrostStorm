@@ -1,0 +1,17 @@
+<div class="d-flex justify-content-start flex-wrap">
+    <div class="mb-3 d-flex flex-row align-items-center justify-content-center">
+        <img alt="profile picture" src="{{ post.author.avatar(30) }}">
+        <p class="d-flex flex-column">
+            <a class="mx-2 text-decoration-none text-secondary"
+               href="{{ url_for('user_bp.user', username=post.author.username) }}">
+                {{ post.author.username }}
+            </a>
+            {{ moment(post.timestamp).fromNow() }}
+        </p>
+    </div>
+    {% if post.language and post.language != g.locale %}
+
+<!--    <a href="#">{{ _('Translate') }}</a>-->
+    {% endif %}
+    {{ post.body }}
+</div>
