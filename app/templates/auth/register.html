@@ -43,24 +43,29 @@
         <p>{{ form.submit(class="btn btn-success btn-block mt-2") }}</p>
         <div class="text-center mt-2">
             <p>or sign up with:</p>
-            <button class="btn btn-secondary btn-floating mx-1" type="button">
-                <i class="fab fa-facebook-f fa-lg"></i>
-            </button>
+            <a class="btn-floating" href="https://www.facebook.com" type="button">
+                <img height="auto" loading="lazy" src="{{ url_for('static', filename='img/facebook-svgrepo-com.svg') }}"
+                     width="30">
+            </a>
 
-            <button class="btn btn-secondary btn-floating mx-1" type="button">
-                <i class="fab fa-google fa-lg"></i>
-            </button>
+            <a class=" btn-floating mx-3" href="https://www.google.com" target="_blank" type="button">
+                <img height="auto" loading="lazy" src="{{ url_for('static', filename='img/google-svgrepo-com.svg') }}"
+                     width="30">
+            </a>
 
-            <button class="btn btn-secondary btn-floating mx-1" type="button">
-                <i class="fab fa-twitter fa-lg"></i>
-            </button>
+            <a class="btn-floating" href="https://www.twitter.com" target="_blank" type="button">
+                <img height="auto" loading="lazy" src="{{ url_for('static', filename='img/twitter-svgrepo-com.svg') }}"
+                     width="30">
+            </a>
 
-            <button class="btn btn-secondary btn-floating mx-1" type="button">
-                <i class="fab fa-github fa-lg"></i>
-            </button>
+            <a class="btn-floating ms-3" href="https://www.github.com" target="_blank" type="button">
+                <img height="auto" loading="lazy" src="{{ url_for('static', filename='img/github-svgrepo-com.svg') }}"
+                     width="30">
+            </a>
         </div>
     </form>
-    <p class="mt-4">Already have an account? <a href="{{ url_for('user_bp.login') }}" class="text-decoration-none">sign in</a></p>
+    <p class="mt-4">Already have an account? <a class="text-decoration-none" href="{{ url_for('user_bp.login') }}">sign
+        in</a></p>
 </div>
 {% endblock %}
 {% block footer %}{% endblock %}

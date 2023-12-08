@@ -25,14 +25,14 @@
             {{ form.password.label(class="form-label") }}<br>
             {{ form.password(size=28, class='rounded-pill form-control p-1') }}<br>
             {% for error in form.password.errors %}
-            <span style="color: red;">{{ error }}</span>
+            <span style="color: red;" class="mt-0">{{ error }}</span>
             {% endfor %}
         </p>
         <p>{{ form.remember_me(class="form-check-input") }} {{ form.remember_me.label(class="form-check-label")
             }}</p>
         <div class="row mt-4">
-            <div class="col">{{ form.submit(class="btn btn-primary mb-4") }}</div>
-            <div class="col "><a class="text-decoration-none" href="{{ url_for('user_bp.reset_password_request') }}">Forgot
+            <div class="col-5">{{ form.submit(class="btn btn-primary mb-4") }}</div>
+            <div class="col-7"><a class="text-decoration-none" href="{{ url_for('user_bp.reset_password_request') }}">Forgot
                 password?</a></div>
         </div>
     </form>

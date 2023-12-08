@@ -9,9 +9,9 @@ from langdetect import detect, LangDetectException
 from app import db
 from app.auth import user_bp
 # from app.main import bp
-from app.main.forms import EditProfileForm, EmptyForm, PostForm
+from app.main.forms import EditProfileForm, EmptyForm, PostForm, MessageForm, ReplyForm
 from app.main.forms import SearchForm
-from app.models import User, Post
+from app.models import User, Post, Message, Notification
 from app.translate import translate
 
 
@@ -168,6 +168,23 @@ def before_request():
     g.locale = str(get_locale())
 
 
+@user_bp.route('/send_message/<recipient>', methods=['GET', 'POST'])
+@login_required
+def send_message(recipient):
+    user = User.query.filter_by(username=recipient).first_or_404()
+    form = MessageForm()
+    if form.validate_on_submit():
+        msg = Message(author=current_user, recipient=user,
+                      body=form.message.data)
+        db.session.add(msg)
+        user.add_notification('unread_message_count', user.new_messages())
+        db.session.commit()
+        flash(_('Your message has been sent.'))
+        return redirect(url_for('user_bp.user', username=recipient))
+    return render_template('send_message.html', title=_('Send Message'),
+                           form=form, recipient=recipient, user=current_user)
+
+
 @user_bp.route('/check_account', methods=['GET'])
 @login_required
 def check_account():
@@ -182,9 +199,66 @@ def check_account():
     return redirect(url_for('next_page'))
 
 
-# Example of handling user re-login
+@user_bp.route('/messages')
+@login_required
+def messages():
+    current_user.last_message_read_time = datetime.utcnow()
+    current_user.add_notification('unread_message_count', 0)
+    db.session.commit()
+    page = request.args.get('page', 1, type=int)
+    messages = current_user.messages_received.order_by(
+        Message.timestamp.desc()).paginate(
+            page=page, per_page=current_app.config['POSTS_PER_PAGE'],
+            error_out=False)
+    next_url = url_for('user_bp.messages', page=messages.next_num) \
+        if messages.has_next else None
+    prev_url = url_for('user_bp.messages', page=messages.prev_num) \
+        if messages.has_prev else None
+    return render_template('messages.html', messages=messages.items,
+                           next_url=next_url, prev_url=prev_url)
+
+
+# handling user re-login
 @user_bp.route('/relogin', methods=['POST'])
 @login_required
 def relogin():
     logout_user()  # Log out the current user
     return redirect(url_for('user_bp.login'))  # Redirect the user to the login page
+
+
+@user_bp.route('/user/<username>/popup')
+@login_required
+def user_popup(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    form = EmptyForm()
+    return render_template('user_popup.html', user=user, form=form)
+
+
+@user_bp.route('/notifications')
+@login_required
+def notifications():
+    since = request.args.get('since', 0.0, type=float)
+    notifications = current_user.notifications.filter(
+        Notification.timestamp > since).order_by(Notification.timestamp.asc())
+    return jsonify([{
+        'name': n.name,
+        'data': n.get_data(),
+        'timestamp': n.timestamp
+    } for n in notifications])
+
+
+@user_bp.route('/reply_message/<int:message_id>', methods=['GET', 'POST'])
+@login_required
+def reply_message(message_id):
+    message = Message.query.get_or_404(message_id)
+    form = ReplyForm()
+
+    if form.validate_on_submit():
+        reply = Message(author=current_user, recipient=message.author,
+                        body=form.reply_content.data, parent_message=message)
+        db.session.add(reply)
+        db.session.commit()
+        flash('Your reply has been sent.')
+        return redirect(url_for('user_bp.messages'))
+
+    return render_template('reply.html', title='Reply', form=form, original_message=message)

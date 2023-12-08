@@ -29,7 +29,7 @@ class EmptyForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    post = TextAreaField(_l('Say something'), validators=[DataRequired()])
+    post = TextAreaField(_l('Got something to say?'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
 
@@ -42,3 +42,14 @@ class SearchForm(FlaskForm):
         if 'meta' not in kwargs:
             kwargs['meta'] = {'csrf': False}
         super(SearchForm, self).__init__(*args, **kwargs)
+
+
+class MessageForm(FlaskForm):
+    message = TextAreaField(_l('Message'), validators=[
+        DataRequired(), Length(min=0, max=140)])
+    submit = SubmitField(_l('Submit'))
+
+
+class ReplyForm(FlaskForm):
+    reply_content = TextAreaField('Reply', validators=[DataRequired(), Length(min=1, max=140)])
+    submit_reply = SubmitField('Send Reply')

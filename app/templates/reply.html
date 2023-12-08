@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block reply %}
+    <h1>Reply to Message</h1>
+    <p>Original Message:</p>
+    <p>{{ original_message.body }}</p>
+
+    <form method="post">
+        {{ form.csrf_token }}
+        {{ form.reply_content.label(class='form-label') }}<br>
+        {{ form.reply_content(size=30, class='form-control') }}<br>
+        {{ form.submit_reply(class='btn btn-outline-primary rounded') }}
+    </form>
+{% endblock %}

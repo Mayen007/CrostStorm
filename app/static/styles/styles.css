@@ -3,9 +3,42 @@ body{
   font-family: Tahoma,verdana;
 }
 html{
-scroll-behaviour:smooth;}
+scroll-behavior:smooth;}
 
 footer a:hover{
 text-decoration: underline;
-color: neon;
+color: rgb(234, 107, 16);
 }
+.bg-green{
+  background-color: rgb(153, 228, 153);
+  border-radius: 10px;
+ 
+  
+}
+.bg-orange{
+  background-color: rgb(163, 160, 234);
+  border-radius: 10px;
+  color: white;
+  
+}
+.bg-peach{
+  background-color: rgb(48, 38, 28);
+  border-radius: 10px;
+  color: white;
+  
+}
+.circle-icon{
+  /* border-radius: 20px; */
+  background-color: rgb(198, 185, 185);
+  width: 40px;
+  height: auto;
+  border-radius: 50%;
+  padding: 4px;
+  margin: auto;
+  background-color: white;
+  border-color: blue;
+}
+.wall{
+background-color: white;
+}
+
