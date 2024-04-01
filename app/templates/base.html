@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     {% if title %}
-    <title>{{ title }} - Crost Storm</title>
+    <title translate="no">{{ title }} - Crost Storm</title>
     {% else %}
-    <title>Crost Storm</title>
+    <title translate="no">Crost Storm</title>
     {% endif %}
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -26,30 +26,25 @@
 </head>
 
 
-<body class="bg-light">
+<body class="">
     {% block nav %}
     {% if user is defined and user.is_authenticated %}
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-lg">
-        <!-- Container wrapper -->
         <div class="container">
             <a class="navbar-brand mt-2 mt-lg-0" href="{{ url_for('user_bp.index') }}">
-                <img alt="crost storm Logo" class="img-fluid thumbnail" height="auto" loading="lazy"
-                    src="{{ url_for('static', filename='img/OIG.jpeg') }}" width="40vw" />
-                <small class="text-black fw-bold fs-5">CROST STORM</small>
+                <img alt="crost storm Logo" class="img-fluid thumbnail img-logo" width="50px" height="25px" loading="lazy"
+                    src="{{ url_for('static', filename='img/OIG.jpeg') }}" />
+                <small class="text-black fw-bold fs-5" translate="no">CROST STORM</small>
             </a>
-
-            <!-- Toggle button -->
-            <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-                class="navbar-toggler p-1" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse"
+            <button aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler border-0" data-bs-target="#navbarCollapse" data-bs-toggle="collapse"
                 type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Collapsible wrapper -->
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left links -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
                         <a class="nav-link" href="#">Explore</a>
                     </li>
@@ -64,7 +59,7 @@
                             id="navbarDropdown" role="button">
                             More
                         </a>
-                        <ul aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-dark">
+                        <ul aria-labelledby="navbarDropdown" class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">New Releases</a></li>
                             <li><a class="dropdown-item" href="#">Exclusives</a></li>
                             <li><a class="dropdown-item" href="#">Screenings</a></li>
@@ -72,48 +67,33 @@
                     </li>
                 </ul>
 
-                <!--            <form class="d-flex input-group w-auto">-->
-                <!--                <input aria-label="Search" class="form-control" placeholder="Search"-->
-                <!--                       type="search"/>-->
-                <!--                -->
-                <!--            </form>-->
-
                 {% if g.search_form %}
                 <form action="{{ url_for('user_bp.search') }}" class="navbar-form me-4" method="get">
                     <div class="form-group">
                         {{ g.search_form.q(size=20, class='form-control',
                         placeholder=g.search_form.q.label.text) }}
                     </div>
-                    <!--                <button class="btn btn-outline-primary" type="button"><i class="fas fa-search"></i>-->
-                    <!--                </button>-->
                 </form>
                 {% endif %}
-
-                <!-- Right elements -->
-                <div class="d-flex justify-content-between align-items-center">
-                    <!-- Notifications -->
-                    <a class="link-body-emphasis text-decoration-none ms-5" href="{{ url_for('user_bp.messages') }}">
+                <div class="d-flex align-items-center">
+                    <a class="link-body-emphasis text-decoration-none me-2" href="{{ url_for('user_bp.messages') }}">
                         <i class="fas fa-bell"></i>
                         {% set new_messages = current_user.new_messages() %}
-                        <span class="badge bg-danger" id="message_count" style="visibility: {% if new_messages %}visible
-                                                     {% else %}hidden {% endif %};">
+                        <span class="badge bg-danger" id="message_count"
+                            style="visibility: {% if new_messages %}visible{% else %}hidden{% endif %};">
                             {{ new_messages }}
                         </span>
                     </a>
-                    <!-- Icon -->
-                    <a class="text-reset me-4" href="#" title="Tickets">
+                    <a class="link-body-emphasis me-4" href="#" title="Tickets">
                         <i class="fas fa-ticket-alt"></i>
                     </a>
-                    <!-- Avatar -->
                     <div class="dropdown">
                         <a aria-expanded="false" class="dropdown-toggle d-flex align-items-center hidden-arrow"
-                            data-bs-toggle="dropdown" id="navbarDropdownMenuAvatar" role="button">
+                            data-bs-toggle="dropdown" href="#" id="navbarDropdownMenuAvatar" role="button">
                             <img alt="profile picture" class="rounded-circle" height="25"
                                 src="{{ user.avatar(128) }}" />
-
                         </a>
-                        <ul aria-labelledby="navbarDropdownMenuAvatar"
-                            class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                        <ul aria-labelledby="navbarDropdownMenuAvatar" class="dropdown-menu dropdown-menu-end">
                             <li>
                                 <a class="dropdown-item"
                                     href="{{ url_for('user_bp.user', username=current_user.username) }}">My
@@ -132,11 +112,11 @@
                         </ul>
                     </div>
                 </div>
-                <!-- Right elements -->
             </div>
-            <!-- Collapsible wrapper -->
         </div>
     </nav>
+
+
     <!-- Navbar -->
     {% endif %}
     {% endblock %}
@@ -153,79 +133,81 @@
     {% block reply %}{% endblock %}
     {% block send_message %}{% endblock %}
     {% block footer %}
-    <footer class="page-footer text-center text-md-left  pt-0">
+    <footer class="page-footer pt-0 mt-4 bg-black">
+        <div class="container">
+            <div class="bg-primary text-light">
+                <div>
+                    <!--Grid row-->
+                    <div class="row py-4 d-flex align-items-center cta">
 
-        <div class="bg-primary text-light">
-            <div class="container">
-                <!--Grid row-->
-                <div class="row py-4 d-flex align-items-center cta">
+                        <!--Grid column-->
+                        <div class="col-12 col-md-5 text-left mb-md-0">
+                            <h6 class="mb-0 white-text text-center text-md-left"><strong>Get
+                                    connected with us on social
+                                    networks!</strong></h6>
+                        </div>
+                        <!--Grid column-->
 
-                    <!--Grid column-->
-                    <div class="col-12 col-md-5 text-left mb-md-0">
-                        <h6 class="mb-0 white-text text-center text-md-left"><strong>Get
-                                connected with us on social
-                                networks!</strong></h6>
+                        <!--Grid column-->
+                        <div class="col-12 col-md-7 text-center text-md-right">
+                            <!--Facebook-->
+                            <a class="p-2 m-2 fa-lg text-light ml-0"><i class="fab fa-facebook-f white-text mr-lg-4">
+                                </i></a>
+                            <!--Twitter-->
+                            <a class="p-2 m-2 fa-lg text-light"><i class="fab fa-twitter white-text mr-lg-4"> </i></a>
+                            <!--Google +-->
+                            <a class="p-2 m-2 fa-lg text-light"><i class="fab fa-google-plus-g white-text mr-lg-4">
+                                </i></a>
+                            <!--Linkedin-->
+                            <a class="p-2 m-2 fa-lg text-light"><i class="fab fa-linkedin-in white-text mr-lg-4">
+                                </i></a>
+                            <!--Instagram-->
+                            <a class="p-2 m-2 fa-lg text-light"><i class="fab fa-instagram white-text mr-lg-4"> </i></a>
+                        </div>
+                        <!--Grid column-->
+
                     </div>
-                    <!--Grid column-->
-
-                    <!--Grid column-->
-                    <div class="col-12 col-md-7 text-center text-md-right">
-                        <!--Facebook-->
-                        <a class="p-2 m-2 fa-lg text-light ml-0"><i class="fab fa-facebook-f white-text mr-lg-4">
-                            </i></a>
-                        <!--Twitter-->
-                        <a class="p-2 m-2 fa-lg text-light"><i class="fab fa-twitter white-text mr-lg-4"> </i></a>
-                        <!--Google +-->
-                        <a class="p-2 m-2 fa-lg text-light"><i class="fab fa-google-plus-g white-text mr-lg-4">
-                            </i></a>
-                        <!--Linkedin-->
-                        <a class="p-2 m-2 fa-lg text-light"><i class="fab fa-linkedin-in white-text mr-lg-4"> </i></a>
-                        <!--Instagram-->
-                        <a class="p-2 m-2 fa-lg text-light"><i class="fab fa-instagram white-text mr-lg-4"> </i></a>
-                    </div>
-                    <!--Grid column-->
-
+                    <!--Grid row-->
                 </div>
-                <!--Grid row-->
             </div>
-        </div>
 
-        <!--Footer Links-->
-        <div class="container mt-5 mb-4 text-center text-md-left">
-            <div class="row mt-3">
-
-                <!--First column-->
-                <div class="col-md-3 col-lg-4 col-xl-3 mb-4 dark-grey-text">
-                    <h6 class="text-uppercase font-weight-bold"><strong>Crost Storm</strong></h6>
+            <!--Footer Links-->
+            <div class="row mt-5 flex-wrap">
+                <!-- First column -->
+                <div class="col-md-3 col-lg-3 col-xl-3 mb-4 text-light">
+                    <h6 class="text-uppercase fw-bold">Categories</h6>
                     <hr class="blue mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                    <p>Immerse yourself in your own little world. Be thrilled! Be alive!</p>
+                    <p><a class="text-decoration-none text-light" href="#!">Movies</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">TV Shows</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Documentaries</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Awards & Festivals</a></p>
                 </div>
                 <!--/.First column-->
 
-                <!--Second column-->
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4 dark-grey-text">
-                    <h6 class="text-uppercase font-weight-bold"><strong>Products</strong></h6>
+                <!-- Second column -->
+                <div class="col-md-3 col-lg-3 col-xl-3 mb-4 text-light">
+                    <h6 class="text-uppercase fw-bold">Resources</h6>
                     <hr class="blue mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                    <p><a class="dark-grey-text" href="#!">MDBootstrap</a></p>
-                    <p><a class="dark-grey-text" href="#!">MDWordPress</a></p>
-                    <p><a class="dark-grey-text" href="#!">BrandFlow</a></p>
-                    <p><a class="dark-grey-text" href="#!">Bootstrap Angular</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Events Calendar</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Articles & Reviews</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Film Schools</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Production Companies</a></p>
                 </div>
                 <!--/.Second column-->
 
-                <!--Third column-->
-                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4 dark-grey-text">
-                    <h6 class="text-uppercase font-weight-bold"><strong>Useful links</strong></h6>
+                <!-- Third column -->
+                <div class="col-md-3 col-lg-3 col-xl-3 mb-4 text-light">
+                    <h6 class="text-uppercase fw-bold">Community</h6>
                     <hr class="blue mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                    <p><a class="dark-grey-text" href="#!">Your Account</a></p>
-                    <p><a class="dark-grey-text" href="#!">Become an Affiliate</a></p>
-                    <p><a class="dark-grey-text" href="#!">Shipping Rates</a></p>
-                    <p><a class="dark-grey-text" href="#!">Help</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Forums</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Fan Clubs</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Fan Art & Merchandise</a></p>
+                    <p><a class="text-decoration-none text-light" href="#!">Trivia & Quizzes</a></p>
                 </div>
                 <!--/.Third column-->
 
                 <!--Fourth column-->
-                <div class="col-md-4 col-lg-3 col-xl-3 dark-grey-text">
+                <div class="col-md-3 col-lg-3 col-xl-3 text-light">
                     <h6 class="text-uppercase font-weight-bold"><strong>Contact</strong></h6>
                     <hr class="blue mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
                     <p><i class="fas fa-home mr-3"></i> 2<sup>nd</sup> Avenue, New Vale, Juba</p>
@@ -236,18 +218,17 @@
                 <!--/.Fourth column-->
 
             </div>
-        </div>
-        <!--/.Footer Links-->
+            <!--/.Footer Links-->
 
-        <!-- Copyright-->
-        <div class="footer-copyright py-3 text-center border">
-            <div class="container-fluid">
-                © 2023 Copyright: <a class="link-body-emphasis text-decoration-none"
-                    href="{{ url_for('user_bp.index') }}" rel="noopener" target="_self">Crost Storm</a>
+            <!-- Copyright-->
+            <div class="footer-copyright py-3 text-center">
+                <div class="text-white">© {{ current_year }} Copyright: <a class="text-white text-decoration-none"
+                        href="{{ url_for('user_bp.index') }}" rel="noopener" target="_self" translate="no">Crost
+                        Storm</a>
+                </div>
             </div>
+            <!--/.Copyright -->
         </div>
-        <!--/.Copyright -->
-
     </footer>
     {% endblock %}
     <script>
@@ -381,8 +362,9 @@
     <!-- MDB -->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"-->
     <!--        type="text/javascript"></script>-->
-    <script crossorigin="anonymous" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

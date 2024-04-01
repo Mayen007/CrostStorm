@@ -2,10 +2,10 @@ import json
 from datetime import datetime
 from hashlib import md5
 from time import time
-from sqlalchemy.orm import relationship
+
 import jwt
 from flask_login import UserMixin
-from sqlalchemy import and_, ForeignKey
+from sqlalchemy import and_
 from sqlalchemy.testing.pickleable import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -19,8 +19,10 @@ metadata = db.MetaData()
 
 # Association Table for followers
 followers = db.Table('followers', db.metadata,
-                     db.Column('follower_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-                     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+                     db.Column('follower_id', db.Integer, db.ForeignKey(
+                         'user.id'), primary_key=True),
+                     db.Column('followed_id', db.Integer, db.ForeignKey(
+                         'user.id'), primary_key=True),
                      extend_existing=True  # Add this option to allow redefinition
                      )
 
@@ -46,7 +48,8 @@ class User(UserMixin, db.Model):
     last_message_read_time = db.Column(db.DateTime)
 
     # Relationship with Post model - user_posts is a clearer name
-    posts = db.relationship('Post', backref='author_user', lazy='dynamic', overlaps="author_user")
+    posts = db.relationship('Post', backref='author_user',
+                            lazy='dynamic', overlaps="author_user")
 
     # Association table for followers
 
@@ -68,12 +71,14 @@ class User(UserMixin, db.Model):
 
     def remove_duplicate_followers(self, other_user):
         if not isinstance(other_user, User):
-            raise ValueError("Argument 'other_user' must be an instance of the User model.")
+            raise ValueError(
+                "Argument 'other_user' must be an instance of the User model.")
 
         if self.id == other_user.id:
             raise ValueError("Cannot remove duplicates from the same user.")
 
-        duplicates = db.session.query(followers).filter_by(follower_id=self.id, followed_id=other_user.id).all()
+        duplicates = db.session.query(followers).filter_by(
+            follower_id=self.id, followed_id=other_user.id).all()
 
         for duplicate in duplicates:
             db.session.delete(duplicate)
@@ -84,7 +89,8 @@ class User(UserMixin, db.Model):
         followed_users_posts = db.session.query(Post). \
             join(
             followers,
-            and_(followers.c.followed_id == Post.user_id, followers.c.follower_id == self.id)
+            and_(followers.c.followed_id == Post.user_id,
+                 followers.c.follower_id == self.id)
         )
         own_posts = Post.query.filter_by(user_id=self.id)
         return followed_users_posts.union(own_posts).order_by(Post.timestamp.desc())
@@ -131,7 +137,8 @@ class User(UserMixin, db.Model):
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
+            id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=[
+                'HS256'])['reset_password']
         except jwt.ExpiredSignatureError:
             return None  # Token expired
         return User.query.get(id)
@@ -189,14 +196,37 @@ class Post(SearchableMixin, db.Model):
     __tablename__ = 'post'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     author = db.relationship('User', backref='user_posts', overlaps="author_user,user_posts")
     language = db.Column(db.String(5))
+    replies = db.relationship('Reply', backref='post_ref', lazy=True)
+    likes = db.Column(db.Integer, default=0)
+    dislikes = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+
+class Reply(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    post = db.relationship('Post', backref='replies_ref', lazy=True)
+
+
+# Add other necessary fields (e.g., user_id for the author)
+
+
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+
+
+class Dislike(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
 
 
 class Message(db.Model):
@@ -205,8 +235,10 @@ class Message(db.Model):
     recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
     # parent_id = db.Column(db.Integer, db.ForeignKey('message.id'))
-    # reply = db.relationship('Message', remote_side=[id], backref=db.backref('parent', remote_side=[parent_id]))
+
+    # replies = relationship('Message', backref='parent', remote_side=[id])
 
     def __repr__(self):
         return '<Message {}>'.format(self.body)

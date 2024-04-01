@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Display Post Details -->
+<div>
+    <h1>Post</h1>
+    <div>
+        <p>{{ post.body }}</p>
+        <p>Author: {{ post.author.username }}</p>
+        <p>Timestamp: {{ post.timestamp }}</p>
+        <!-- Display other post details as needed -->
+    </div>
+
+    <!-- Display Replies -->
+    <h2>Replies</h2>
+    <div>
+        {% for reply in replies %}
+        <!-- Display each reply -->
+        <div>
+            <p>{{ reply.content }}</p>
+            <p>Author: {{ reply.author.username }}</p>
+            <p>Timestamp: {{ reply.timestamp }}</p>
+            <!-- Display reply author, timestamp, etc. -->
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Reply Form -->
+    <h2>Reply to Post</h2>
+    <form action="{{ url_for('user_bp.reply_post', post_id=post.id) }}" method="post">
+        {{ form.hidden_tag() }} {# Include CSRF token #}
+        {{ form.reply_content.label }} {{ form.reply_content(size=32) }}
+        <input type="submit" value="Reply">
+    </form>
+
+    <!-- Action Buttons (like, dislike) -->
+    <h2>Like/Dislike</h2>
+    <form action="{{ url_for('user_bp.like_post', post_id=post.id) }}" method="post">
+        <input type="submit" value="Like">
+    </form>
+    <form action="{{ url_for('user_bp.dislike_post', post_id=post.id) }}" method="post">
+        <input type="submit" value="Dislike">
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#likeForm').submit(function (event) {
+            event.preventDefault();
+            $.post($(this).attr('action'), function () {
+                updateCounts({{ post.id }});
+        });
+    });
+    $('.reply-btn').click(function () {
+        var postId = $(this).data('post-id');
+        $('#submitReply').data('post-id', postId); // Store postId in the modal button for use later
+    });
+
+    $('#submitReply').click(function () {
+        var postId = $(this).data('post-id');
+        var replyContent = $('#replyContent').val();
+        if (replyContent.trim() !== '') {
+            $.post('/post/' + postId + '/reply', { reply_content: replyContent }, function () {
+                updateCounts(postId);
+                $('#replyModal').modal('hide'); // Close the modal after submitting the reply
+            });
+        }
+    });
+
+    $('#dislikeForm').submit(function (event) {
+        event.preventDefault();
+        $.post($(this).attr('action'), function () {
+            updateCounts({{ post.id }});
+    });
+            });
+
+    $('#replyForm').submit(function (event) {
+        event.preventDefault();
+        var replyContent = $('textarea[name="reply_content"]').val();
+        $.post($(this).attr('action'), { reply_content: replyContent }, function () {
+            updateCounts({{ post.id }});
+    });
+            });
+
+    function updateCounts(postId) {
+        $.get('/get_counts/' + postId, function (data) {
+            $('.like-btn').text('Like (' + data.likeCount + ')');
+            $('.reply-btn').text('Reply (' + data.replyCount + ')');
+            $('.dislike-btn').text('Dislike (' + data.dislikeCount + ')');
+        });
+    }
+        });
+</script>
+{% endblock %}
