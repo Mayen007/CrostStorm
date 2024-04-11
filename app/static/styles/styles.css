@@ -1,7 +1,5 @@
 body {
   font-family: Tahoma, verdana;
-  background-color: #fff;
-  color: black;
 }
 
 html {
@@ -16,40 +14,46 @@ footer a:hover {
   color: rgb(234, 107, 16);
 }
 
-.bg-green {
-  background-color: rgb(153, 228, 153);
-  border-radius: 10px;
+.hero-section{
+background-image: linear-gradient(45deg, #191970 , #800080);
+height: 100vh;
 }
-.cta-section{
-background-image: linear-gradient(80deg, #f7f5ed, #5b5346, #3cee59, #2b9153, #006b38)}
-
+.hero-section{
+display: flex;
+justify-content: center;
+align-items: center}
 .cta-links{
 margin-top: 40px;
 margin-bottom: 30px;
 }
-
-.cta-btn{
-text-decoration: none;
-color: #233274;
-background-color: #efe8e6;
-border: 1px solid grey;
-border-radius: 10px;
-padding: 5px 10px 5px 10px;
-}
-.bg-orange {
-  background-color: rgb(163, 160, 234);
-  border-radius: 10px;
-  color: white;
-
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.bg-peach {
-  background-color: rgb(48, 38, 28);
-  border-radius: 10px;
-  color: white;
-
+.hero-content h1 {
+    font-size: 3.5rem;
 }
 
+.hero-content p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.cta-buttons .cta-btn {
+    background-color: #fff;
+    color: #191970;
+    padding: 12px 24px;
+    border-radius: 25px;
+    margin-right: 20px;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.cta-buttons .cta-btn:hover {
+    background-color: #191970;
+    color: #fff;
+}
 .circle-icon {
   /* border-radius: 20px; */
   background-color: rgb(198, 185, 185);

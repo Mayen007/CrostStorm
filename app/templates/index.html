@@ -1,71 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="carousel slide" data-bs-ride="carousel" id="carouselExampleCaptions">
-    <div class="carousel-indicators">
-        <button aria-current="true" aria-label="Slide 1" class="active" data-bs-slide-to="0"
-                data-bs-target="#carouselExampleCaptions" type="button"></button>
-        <button aria-label="Slide 2" data-bs-slide-to="1" data-bs-target="#carouselExampleCaptions"
-                type="button"></button>
-        <button aria-label="Slide 3" data-bs-slide-to="2" data-bs-target="#carouselExampleCaptions"
-                type="button"></button>
-        <button aria-label="Slide 4" data-bs-slide-to="3" data-bs-target="#carouselExampleCaptions"
-                type="button"></button>
-    </div>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img alt="carousel image1" class="img-fluid" height="700px"
-                 src="{{ url_for('static', filename='img/logo3.jpeg') }}" width="100%">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>First slide label</h5>
-                <p>Some representative placeholder content for the first slide.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img alt="carousel image2" class="img-fluid" height="900px"
-                 src="{{ url_for('static', filename='img/OIG.jpeg') }}" width="100%">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Second slide label</h5>
-                <p>Some representative placeholder content for the second slide.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img alt="carousel image3" class="img-fluid" height="100px"
-                 src="{{ url_for('static', filename='img/logo2.jpeg') }}" width="100%">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Third slide label</h5>
-                <p>Some representative placeholder content for the third slide.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img alt="carousel image4" class="img-fluid" height="700px"
-                 src="{{ url_for('static', filename='img/logo4.jpeg') }}" width="100%" loading="lazy">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Fourth slide label</h5>
-                <p>Some representative placeholder content for the fourth slide.</p>
-            </div>
+<section class="hero-section">
+    <div class="hero-content text-center">
+        <h1 class="display-1 mb-4 fw-bold">Discover the Latest Movies</h1>
+        <p class="lead">Indulge in the magic of cinema! Immerse yourself in captivating stories and unforgettable moments. Whether you're seeking thrilling adventures or heartwarming tales, we've got the perfect movie for you.</p>
+        <div class="cta-buttons mt-5">
+            <a class="cta-btn btn btn-primary" href="#movies">Explore Now</a>
+            <a class="cta-btn btn" href="#tickets">Buy Tickets</a>
         </div>
     </div>
-    <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleCaptions" type="button">
-        <span aria-hidden="true" class="carousel-control-prev-icon"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleCaptions" type="button">
-        <span aria-hidden="true" class="carousel-control-next-icon"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
+</section>
+
 <main class="container">
-    <section class="cta-section mt-5 py-4">
-        <div class="cta-content text-center">
-            <h2 class="display-3 mb-4">Discover the Latest Movies</h2>
-            <p>Get ready for an unforgettable cinematic experience. Buy tickets now and explore our movie reviews.</p>
-            <div class="cta-links">
-                <a class="cta-btn" href="#movies">Explore Movies</a>
-                <a class="cta-btn" href="#movies">Tickets</a>
-            </div>
-        </div>
-    </section>
     <div class="" style="background-image: url('app/static/img/wall-image.jpeg')">
         <div class="d-flex justify-content-center align-items-center wall">
             <div class="py-3 px-4">
